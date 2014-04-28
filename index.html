@@ -94,6 +94,7 @@ svg {border: solid black 1px;}
 	
 	var ignore_nulls = function(scale, attr_list, point, default_val){
 		val = unpack_attr(point, attr_list);
+		console.log(val);
 		if (val){
 			return scale(val);
 		}
@@ -160,7 +161,7 @@ svg {border: solid black 1px;}
 		//add a transition to it so that it looks prettier when it moves, 
 		circles.transition()
 			.attr("r", function(data_vals){return ignore_nulls(rScale, number_split, data_vals, 3);})
-			.style("fill", function(data_vals){return ignore_nulls(fillScale, ordinal_split, data_vals, 'black')})
+			.style("fill", function(data_vals){return ignore_nulls(fillScale, ordinal_split, data_vals, 'red')})
 			
 		
 		
