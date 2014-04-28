@@ -123,7 +123,7 @@ svg {border: solid black 1px;}
 					// Plot the points
 					circles = svg.selectAll("circle").data(data).enter().append("circle");
 
-					circles.attr("cx", width/2)
+					circles.attr("cx", function(point){return priceScale(point.attributes['Price Range']);})
 					.attr("cy", height/2)
 					.attr("r", function(point){return reviewScale(point.review_count);})
 					.style("fill", "#f00").style("opacity", 0.3);
