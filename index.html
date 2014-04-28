@@ -10,6 +10,13 @@
 
 	<style>
 		svg {border: solid black 1px;}
+			.axis path,
+			.axis line {
+				fill: none;
+				stroke: black;
+			}
+			.axis text{ text-anchor : middle; font-size : x-small}
+			
 
 	</style>
 </head>
@@ -34,7 +41,7 @@
 	var height = 500;
 	var width = 500;
 
-	var padding = 10;
+	var padding = 30;
 	
 	var svg = d3.select("#network").append("svg").attr("height", height).attr("width", width);
 
@@ -127,6 +134,14 @@
 					var priceScale = d3.scale.linear().domain([1,5]).range([0, width]);
 
 					var reviewScale = d3.scale.log().domain([1,max_reviews]).range([0,10]);
+					
+					var x_Axis = d3.svg.axis().scale(longScale).orient("bottom");
+					
+					var y_Axis = d3.svg.axis().scale(latScale).orient("left");
+					
+					svg.append("g").attr("class", "axis").attr("transform", "translate(0," + (height - padding) + ")").call(x_Axis);
+					
+					svg.append("g").attr("class", "axis").attr("transform", "translate(" + padding + ",0)").call(y_Axis);
 
 					var randomScale = d3.scale.ordinal().domain([1,5]).range(['red', 'yellow', 'blue', 'green', 'purple']);
 					//var starsScale = d3.scale.linear().domain([0, 5]).range([height, 0]);
