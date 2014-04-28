@@ -33,7 +33,7 @@ svg {border: solid black 1px;}
 	var height = 500;
 	var width = 500;
 
-	var padding = 50;
+	var padding = 10;
 	
 	var svg = d3.select("#network").append("svg").attr("height", height).attr("width", width);
 
@@ -153,7 +153,7 @@ svg {border: solid black 1px;}
 			yScale = d3.scale.ordinal().domain(values).range([height - padding, padding]);
 		});
 		
-
+		//add a transition to it so that it looks prettier when it moves, 
 		circles.transition()
 			.attr("cx", function(data_vals){return ignore_nulls(xScale, number_split, data_vals, width - padding);})
 			.attr("cy", function(data_vals){return ignore_nulls(yScale, ordinal_split, data_vals, height - padding)})
