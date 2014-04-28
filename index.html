@@ -10,19 +10,21 @@
 
 	<style>
 		svg {border: solid black 1px;}
-
+		#group_form {border: solid black 1px; width: 100px; position:absolute; right:950px;}
 	</style>
 </head>
 <body>
-	<div id = "group_form">
+	<h1> Yelp Dataset </h1>
+	<div id = "group_form" border="solid black 1px">
 	<form>
-		<input type="radio" name="number" value="attributes.Price Range">Price
+		<h3> Number Values </h3>
+		<input type="radio" name="number" value="attributes.Price Range">Price <br>
 		<input type="radio" name="number" value="stars">Rating<br>
-		<input type="radio" name="number" value="review_count" checked>Review Count<br>
-		<br>
+		<input type="radio" name="number" value="review_count" checked>Review Count
+		<h3> Ordinal Values </h3>
 		<input type="radio" name="ordinal" value="attributes.Noise Level">Noise Level
 		<input type="radio" name="ordinal" value="attributes.Alcohol">Alcohol<br>
-		<input type="radio" name="ordinal" value="attributes.Wi-Fi">Wi-Fi
+		<input type="radio" name="ordinal" value="attributes.Wi-Fi">Wi-Fi <br>
 		<input type="radio" name="ordinal" value="attributes.Good For">Meal Type<br>
 	</form>
 	</div>
@@ -157,10 +159,10 @@
 
 		var rScale, fillScale;
 		find_min_max(number_split, data, function(min_val, max_val){
-			console.log("min");
-			console.log(min_val);
-			console.log("max");
-			console.log(max_val);
+			//console.log("min");
+			//console.log(min_val);
+			//console.log("max");
+			//console.log(max_val);
 			rScale = d3.scale.log().domain([min_val, max_val]).range([1,10]);
 		});
 		if (ordinal){
