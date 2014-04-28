@@ -11,11 +11,12 @@
 	<style>
 		svg {border: solid black 1px;}
 		#group_form {border: solid black 1px; width: 100px; position:absolute; right:950px;}
+		#network{position: relative;}
 	</style>
 </head>
 <body>
 	<h1> Yelp Dataset </h1>
-	<div id = "group_form" border="solid black 1px">
+	<div id = "group_form">
 	<form>
 		<h3> Number Values </h3>
 		<input type="radio" name="number" value="attributes.Price Range">Price <br>
@@ -27,8 +28,12 @@
 		<input type="radio" name="ordinal" value="attributes.Wi-Fi">Wi-Fi <br>
 		<input type="radio" name="ordinal" value="attributes.Good For">Meal Type<br>
 	</form>
+	<br>
 	</div>
-	<div id="group"></div>
+		<h3> Values </h3>
+	<div id="ordinal_vals">
+	</div>
+	
 	<div id="network"></div>
 
 
@@ -142,11 +147,10 @@
 					.style("opacity", 0.3);
 
 
-
-
 	   	 });
 
 	$('#group_form').change(function(){
+		console.log("changed");
 		var number = $("input:radio[name=number]:checked").val();
 		var ordinal = $("input:radio[name=ordinal]:checked").val();
 		
@@ -168,13 +172,18 @@
 		if (ordinal){
 		find_ordinals(ordinal_split, data, function(values){
 			fillScale = d3.scale.category10().domain(values);
-		});}
-		
-		if (ordinal){
-		//add a transition to it so that it looks prettier when it moves, 
-		circles.transition()
-			.attr("r", function(data_vals){return ignore_nulls(rScale, number_split, data_vals, 3);})
-			.style("fill", function(data_vals){return ignore_nulls(fillScale, ordinal_split, data_vals, 'black')})
+			//add a transition to it so that it looks prettier when it moves, 
+			circles.transition()
+				.attr("r", function(data_vals){return ignore_nulls(rScale, number_split, data_vals, 3);})
+				.style("fill", function(data_vals){return ignore_nulls(fillScale, ordinal_split, data_vals, 'black')})
+			$("#ordinal_vals").html('');
+			values.forEach(function(value){
+				$("#ordinal_vals").append('<li>' + value + '</li>');
+			});
+
+
+		});		
+
 		}
 		else
 		{
@@ -182,6 +191,7 @@
 			.attr("r", function(data_vals){return ignore_nulls(rScale, number_split, data_vals, 3);})
 
 		}
+
 			
 		
 		
