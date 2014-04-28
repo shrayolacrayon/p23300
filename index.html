@@ -20,7 +20,7 @@
 		<input type="radio" name="number" value="stars">Rating<br>
 		<input type="radio" name="number" value="review_count" checked>Review Count<br>
 		<br>
-		<input type="radio" name="ordinal" value="attributes.Noise Level" checked>Noise Level
+		<input type="radio" name="ordinal" value="attributes.Noise Level">Noise Level
 		<input type="radio" name="ordinal" value="attributes.Alcohol">Alcohol<br>
 		<input type="radio" name="ordinal" value="attributes.Wi-Fi">Wi-Fi
 		<input type="radio" name="ordinal" value="attributes.Good For">Meal Type<br>
@@ -66,13 +66,14 @@
 		var min = Number.MAX_VALUE;
 		data.forEach(function(d){
 			data_attr = unpack_attr(d, attribute)
+			console.log(data_attr)
 			if (data_attr > max){
-				max = data_attr;
+				max = data_attr;}
 			if (data_attr < min){
 				min = data_attr;
 			}
-			}
-		})
+			
+		});
 		callback(min, max);
 	}
 	
@@ -95,7 +96,7 @@
 	
 	var ignore_nulls = function(scale, attr_list, point, default_val){
 		val = unpack_attr(point, attr_list);
-		console.log(val);
+		//console.log(val);
 		if (val){
 			return scale(val);
 		}
@@ -127,7 +128,7 @@
 
 					var reviewScale = d3.scale.log().domain([1,max_reviews]).range([0,10]);
 
-					var starScale = d3.scale.ordinal().domain([1,5]).range(['red', 'yellow', 'blue', 'green', 'purple']);
+					var randomScale = d3.scale.ordinal().domain([1,5]).range(['red', 'yellow', 'blue', 'green', 'purple']);
 					//var starsScale = d3.scale.linear().domain([0, 5]).range([height, 0]);
 					// Plot the points
 					circles = svg.selectAll("circle").data(data).enter().append("circle");
@@ -135,7 +136,7 @@
 					circles.attr("cx", function(point){return latScale(point.latitude);})
 					.attr("cy", function(point){return longScale(point.longitude);})
 					.attr("r", function(point){return reviewScale(point.review_count);})
-					.style("fill", function(point){return starScale(point.stars)})
+					.style("fill", function(point){return randomScale(Math.random() * 5);})
 					.style("opacity", 0.3);
 
 
@@ -146,23 +147,39 @@
 	$('#group_form').change(function(){
 		var number = $("input:radio[name=number]:checked").val();
 		var ordinal = $("input:radio[name=ordinal]:checked").val();
+		
+		var ordinal_split;
+		if (ordinal)
+			ordinal_split = ordinal.split('.');
 
 		var number_split = number.split('.');
-		var ordinal_split = ordinal.split('.');
+		
+
 		var rScale, fillScale;
 		find_min_max(number_split, data, function(min_val, max_val){
+			console.log("min");
 			console.log(min_val);
+			console.log("max");
 			console.log(max_val);
-			rScale = d3.scale.linear().domain([min_val, max_val]).range([1,10]);
+			rScale = d3.scale.log().domain([min_val, max_val]).range([1,10]);
 		});
+		if (ordinal){
 		find_ordinals(ordinal_split, data, function(values){
 			fillScale = d3.scale.category10().domain(values);
-		});
+		});}
 		
+		if (ordinal){
 		//add a transition to it so that it looks prettier when it moves, 
 		circles.transition()
 			.attr("r", function(data_vals){return ignore_nulls(rScale, number_split, data_vals, 3);})
-			.style("fill", function(data_vals){return ignore_nulls(fillScale, ordinal_split, data_vals, 'red')})
+			.style("fill", function(data_vals){return ignore_nulls(fillScale, ordinal_split, data_vals, 'black')})
+		}
+		else
+		{
+			circles.transition()
+			.attr("r", function(data_vals){return ignore_nulls(rScale, number_split, data_vals, 3);})
+
+		}
 			
 		
 		
