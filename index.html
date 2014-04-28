@@ -41,7 +41,11 @@
 		callback(min_lat, max_lat, min_long, max_long, max_reviews);
 	}
 
-	var group_by = function(data, attribute, callback){
+	var group_by = function(data, attribute, circles, callback){
+		if  (attribute == "stars"){
+			var xScale = d3.scale.linear().domain([1,5])
+		}
+		circles.attr("cx", function())
 
 	}
 
@@ -55,7 +59,7 @@
 		
 		//http://mimno.infosci.cornell.edu/community/miserables.json
 		
-	var graph;
+	var graph, circles;
 	d3.json("yelp_data.json",
 	   function (error, g) {
 	   	 data = g;
@@ -66,7 +70,7 @@
 					var reviewScale = d3.scale.log().domain([1,max_reviews]).range([0,10]);
 					//var starsScale = d3.scale.linear().domain([0, 5]).range([height, 0]);
 					// Plot the points
-					var circles = svg.selectAll("circle").data(data).enter().append("circle");
+					circles = svg.selectAll("circle").data(data).enter().append("circle");
 
 					circles.attr("cx", width/2)
 					.attr("cy", height/2)
@@ -74,7 +78,10 @@
 					.style("fill", "#f00").style("opacity", 0.3);
 
 
+
+
 	   	 });
+
 	 
 
 	 
