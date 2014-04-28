@@ -9,6 +9,7 @@
 <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <style>
 svg {border: solid black 1px;}
+
 </style>
 </head>
 <body>
@@ -120,7 +121,7 @@ svg {border: solid black 1px;}
 
 					var reviewScale = d3.scale.log().domain([1,max_reviews]).range([0,10]);
 
-					var starScale = d3.scale.category10().domain([1,5]);
+					var starScale = d3.scale.ordinal().domain([1,5]).range(['red', 'yellow', 'blue', 'green', 'purple']);
 					//var starsScale = d3.scale.linear().domain([0, 5]).range([height, 0]);
 					// Plot the points
 					circles = svg.selectAll("circle").data(data).enter().append("circle");
