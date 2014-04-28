@@ -18,7 +18,7 @@ svg {border: solid black 1px;}
 		<input type="radio" name="number" value="stars">Rating<br>
 		<input type="radio" name="number" value="review_count">Review Count<br>
 		<br>
-		<input type="radio" name="ordinal" value="attributes.Noise Level">Noise Level
+		<input type="radio" name="ordinal" value="attributes.Noise Level" checked>Noise Level
 		<input type="radio" name="ordinal" value="attributes.Alcohol">Alcohol<br>
 		<input type="radio" name="ordinal" value="attributes.Wi-Fi">Wi-Fi
 		<input type="radio" name="ordinal" value="attributes.Good For">Meal Type<br>
@@ -29,10 +29,10 @@ svg {border: solid black 1px;}
 
 
 	<script>
-	var height = 800;
-	var width = 800;
+	var height = 500;
+	var width = 500;
 
-	var padding = 10;
+	var padding = 50;
 	
 	var svg = d3.select("#network").append("svg").attr("height", height).attr("width", width);
 
@@ -60,14 +60,14 @@ svg {border: solid black 1px;}
 	}
 
 	var find_min_max = function(attribute, data, callback){
-		var max = Number.MAX_VALUE;
-		var min = -1 * Number.MAX_VALUE;
+		var max = -1 * Number.MAX_VALUE;
+		var min = Number.MAX_VALUE;
 		data.forEach(function(d){
 			data_attr = unpack_attr(d, attribute)
 			if (data_attr > max){
-				max = data[attribute]
+				max = data_attr;
 			if (data_attr < min){
-				min = data[attribute]
+				min = data_attr;
 			}
 			}
 		})
@@ -118,7 +118,9 @@ svg {border: solid black 1px;}
 
 					var priceScale = d3.scale.linear().domain([1,5]).range([0, width]);
 
-					var reviewScale = d3.scale.log().domain([1,max_reviews]).range([0,5]);
+					var reviewScale = d3.scale.log().domain([1,max_reviews]).range([0,10]);
+
+					var starScale = d3.scale.category10().domain([1,5]);
 					//var starsScale = d3.scale.linear().domain([0, 5]).range([height, 0]);
 					// Plot the points
 					circles = svg.selectAll("circle").data(data).enter().append("circle");
@@ -126,7 +128,8 @@ svg {border: solid black 1px;}
 					circles.attr("cx", function(point){return priceScale(point.attributes['Price Range']);})
 					.attr("cy", height/2)
 					.attr("r", function(point){return reviewScale(point.review_count);})
-					.style("fill", "#f00").style("opacity", 0.3);
+					.style("fill", function(point){return starScale(point.stars)})
+					.style("opacity", 0.3);
 
 
 
@@ -141,15 +144,19 @@ svg {border: solid black 1px;}
 		var ordinal_split = ordinal.split('.');
 		var xScale, yScale;
 		find_min_max(number_split, data, function(min_val, max_val){
-			xScale = d3.scale.linear().domain([min_val, max_val]).range([0, width - padding]);
+			console.log(min_val);
+			console.log(max_val);
+			xScale = d3.scale.linear().domain([min_val, max_val]).range([padding, width - padding]);
 		});
 		find_ordinals(ordinal_split, data, function(values){
-			yScale = d3.scale.ordinal().domain(values).range([height - padding, 0]);
+			yScale = d3.scale.ordinal().domain(values).range([height - padding, padding]);
 		});
 		
 
-		circles.attr("cx", function(data_vals){return ignore_nulls(xScale, number_split, data_vals, width - padding);})
-			.attr("cy", function(data_vals){return ignore_nulls(yScale, ordinal_split, data_vals, height - padding)});
+		circles.transition()
+			.attr("cx", function(data_vals){return ignore_nulls(xScale, number_split, data_vals, width - padding);})
+			.attr("cy", function(data_vals){return ignore_nulls(yScale, ordinal_split, data_vals, height - padding)})
+			
 		
 		
 
