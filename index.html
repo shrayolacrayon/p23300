@@ -41,6 +41,10 @@
 		callback(min_lat, max_lat, min_long, max_long, max_reviews);
 	}
 
+	var group_by = function(data, attribute, callback){
+
+	}
+
 	/*var create_attribute_list = function(data, callback){
 		var attributes = [];
 		data.forEach(function(d))
@@ -57,14 +61,16 @@
 	   	 data = g;
 	   	 find_extreme(data, function(min_lat, max_lat, min_long, max_long, max_reviews){
 
-					var reviewsScale = d3.scale.linear().domain([0 , max_reviews ]).range([0, width]);
-					var starsScale = d3.scale.linear().domain([0, 5]).range([height, 0]);
+					var priceScale = d3.scale.linear().domain([1,5]).range([0, width]);
+
+					var reviewScale = d3.scale.log().domain([1,max_reviews]).range([0,10]);
+					//var starsScale = d3.scale.linear().domain([0, 5]).range([height, 0]);
 					// Plot the points
 					var circles = svg.selectAll("circle").data(data).enter().append("circle");
 
-					circles.attr("cx", function (point) { return reviewsScale(point.review_count); })
-					.attr("cy", function (point) { return starsScale(point.longitude); })
-					.attr("r", function(point){return point.stars * 1.5;})
+					circles.attr("cx", width/2)
+					.attr("cy", height/2)
+					.attr("r", function(point){return reviewScale(point.review_count);})
 					.style("fill", "#f00").style("opacity", 0.3);
 
 
