@@ -7,16 +7,15 @@
 	
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<style>
+svg {border: solid black 1px;}
+</style>
 </head>
 <body>
-	<div id="group"></div>
-	<div id="network"></div>
 	<div id = "group_form">
 	<form>
-		<input type="radio" name="number" value="attributes.Price Range">Price
+		<input type="radio" name="number" value="attributes.Price Range" >Price
 		<input type="radio" name="number" value="stars">Rating<br>
-		<input type="radio" name="number" value="hours.Friday.open">Open Time
-		<input type="radio" name="number" value="hours.Friday.close">Close Time<br>
 		<input type="radio" name="number" value="review_count">Review Count<br>
 		<br>
 		<input type="radio" name="ordinal" value="attributes.Noise Level">Noise Level
@@ -25,6 +24,9 @@
 		<input type="radio" name="ordinal" value="attributes.Good For">Meal Type<br>
 	</form>
 	</div>
+	<div id="group"></div>
+	<div id="network"></div>
+
 
 	<script>
 	var height = 800;
@@ -55,13 +57,27 @@
 		callback(min_lat, max_lat, min_long, max_long, max_reviews);
 	}
 
-	var group_by = function(data, attribute, circles, callback){
-		if  (attribute == "stars"){
-			var xScale = d3.scale.linear().domain([1,5])
-		}
-		circles.attr("cx", function())
-
+	var find_min_max = function(attribute, data, callback){
+		var max = Number.MAX_VALUE;
+		var min = -1 * Number.MAX_VALUE;
+		data.forEach(function(d){
+			if (data[attribute] > max){
+				max = data[attribute]
+			if (data[attribute] < min){
+				min = data[attribute]
+			}
+			}
+		})
+		callback(min, max);
 	}
+	
+	var find_ordinals = function(attribute,data,callback){
+		var attributes = data.map(function(obj) { return obj[attribute]; });
+		attributes = attributes.filter(function(v,i) { return attributes.indexOf(v) == i; });
+		callback(attributes);
+	}
+
+
 
 	/*var create_attribute_list = function(data, callback){
 		var attributes = [];
@@ -96,6 +112,15 @@
 
 	   	 });
 
+	$('#group_form').change(function(){
+		var number = $("input:radio[name=number]:checked").val();
+		var ordinal = $("input:radio[name=ordinal]:checked").val();
+	
+		var xScale 
+		
+		
+
+	})
 	 
 
 	 
