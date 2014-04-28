@@ -1,0 +1,85 @@
+<html>
+<head>
+	<!-- 
+		Download this file:
+		mimno.infosci.cornell.edu/info3300/mar12.html 
+	 -->
+	
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+</head>
+<body>
+	<div id="group"></div>
+	<div id="network"></div>
+
+	<script>
+	var height = 800;
+	var width = 800;
+	
+	var svg = d3.select("#network").append("svg").attr("height", height).attr("width", width);
+
+	var data;
+
+	var find_extreme = function(data, callback){
+		var max_lat = -1000;
+		var max_long = -1000;
+		var min_lat = 1000;
+		var min_long = 1000;
+		var max_reviews = -1;
+		data.forEach(function(d){
+			if (d.latitude > max_lat)
+				max_lat = d.latitude;
+			if (d.latitude < min_lat)
+				min_lat = d.latitude;
+			if (d.longitude > max_long)
+				max_long = d.longitude;
+			if (d.longitude < min_long)
+				min_long = d.longitude;
+			if (d.review_count > max_reviews)
+				max_reviews = d.review_count;
+		})
+		callback(min_lat, max_lat, min_long, max_long, max_reviews);
+	}
+
+	/*var create_attribute_list = function(data, callback){
+		var attributes = [];
+		data.forEach(function(d))
+	}*/
+	
+	var force = d3.layout.force()
+	  .size([width, height]);
+		
+		//http://mimno.infosci.cornell.edu/community/miserables.json
+		
+	var graph;
+	d3.json("yelp_data.json",
+	   function (error, g) {
+	   	 data = g;
+	   	 find_extreme(data, function(min_lat, max_lat, min_long, max_long, max_reviews){
+
+					var reviewsScale = d3.scale.linear().domain([0 , max_reviews ]).range([0, width]);
+					var starsScale = d3.scale.linear().domain([0, 5]).range([height, 0]);
+					// Plot the points
+					var circles = svg.selectAll("circle").data(data).enter().append("circle");
+
+					circles.attr("cx", function (point) { return reviewsScale(point.review_count); })
+					.attr("cy", function (point) { return starsScale(point.longitude); })
+					.attr("r", function(point){return point.stars * 1.5;})
+					.style("fill", "#f00").style("opacity", 0.3);
+
+
+	   	 });
+	 
+
+	 
+	 });
+	
+	</script>
+</body>
+
+</html>
+
+
+
+
+
