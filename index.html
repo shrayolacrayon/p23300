@@ -9,7 +9,7 @@
 	<script src="http://d3js.org/d3.v3.min.js"charset="utf-8"></script>
 
 	<style>
-<<<<<<< HEAD
+
 		svg {border: solid black 1px;}
 			.axis path,
 			.axis line {
@@ -17,33 +17,32 @@
 				stroke: black;
 			}
 			.axis text{ text-anchor : middle; font-size : x-small}
-		#group_form {border: solid black 1px; width: 350px; height : 250; position:absolute; left:610px; text-align : center;}
+		#group_form {border: solid black 1px; width: 350px; height : 135;
+						font-size : 8pt ; position:absolute; left:610px; text-align : center;}
+		#ordinal_vals {border: solid black 1px; width: 350px; height : 85px ;
+					position:absolute; top : 160px; fill : black ; text-align : center;
+					text-anchor : middle; line-height: 45px;}
 		#hover_data {border: solid black 1px; width: 350px; height : 150px ;
-					position:absolute; top : 250px; fill : black ;
-					font-size = 8pt; text-align : center;}
-		
-=======
-		svg {border: solid black 1px}
-		#group_form {border: solid black 1px; width: 150px; padding-left: 10px;position:absolute; left:820px}
-		.legend {width: 20px;height:20px;margin-right:10px;display:inline-block;}
+					position:absolute; top : 250px; fill : black ; text-align : center;
+					font-size : 12pt}
 		circle {stroke:black}
->>>>>>> baf6bd13eecce40d2dc38346df1e65eb2824b601
+		.legend {width: 20px;height:20px;margin-right:10px; vertical-align : middle;display:inline-block;}
 	</style>
 </head>
 <body>
 	<h1> Yelp Dataset </h1>
 	<div id = "group_form">
 	<form>
-		<h3> Number Values </h3>
+		<h4> Number Values </h4>
 		<input type="radio" name="number" value="attributes.Price Range">Price
 		<input type="radio" name="number" value="stars">Rating
 		<input type="radio" name="number" value="review_count" checked>Review Count
-		<h3> Ordinal Values </h3>
+		<h4> Ordinal Values </h4>
 		<input type="radio" name="ordinal" value="attributes.Noise Level">Noise Level
 		<input type="radio" name="ordinal" value="attributes.Alcohol">Alcohol
 		<input type="radio" name="ordinal" value="attributes.Wi-Fi">Wi-Fi 
 	</form>
-	<h3> Legend  <span style="font-size:12px">&#9660;</span></h3>
+	<h3> Legend  <span style="font-size:12px"></span></h3>
 	<div id="ordinal_vals">
 	</div>
 	<div id = "hover_data"></div>
@@ -57,13 +56,9 @@
 	var height = 400;
 	var width = 600;
 
-<<<<<<< HEAD
 	var padding = 30;
-	
-=======
-	var padding = 10;
 
->>>>>>> baf6bd13eecce40d2dc38346df1e65eb2824b601
+
 	var svg = d3.select("#network").append("svg").attr("height", height).attr("width", width);
 
 	var data;
@@ -174,7 +169,6 @@
 					.attr("r", function(point){return reviewScale(point.review_count);})
 					.attr("xlink:href", function(d){return "http://maps.google.com/?q=" + d["full_address"];})
 					.style("fill", function(point){return randomScale(Math.random() * 5);})
-<<<<<<< HEAD
 					.style("opacity", 0.6)
 					.on("mouseover", function(d) {
 										
@@ -194,11 +188,7 @@
 									d3.select(this).style("opacity",0.6);
 					})
 					.on("click", function(d){ window.open("http://maps.google.com/?q=" + d["full_address"]);});
-=======
-					.style("opacity", 0.8);
 
-
->>>>>>> baf6bd13eecce40d2dc38346df1e65eb2824b601
 	   	 });
 		 
 
@@ -230,18 +220,11 @@
 				.attr("r", function(data_vals){return ignore_nulls(rScale, number_split, data_vals, 3);})
 				.style("fill", function(data_vals){return ignore_nulls(fillScale, ordinal_split, data_vals, 'gray')})
 			$("#ordinal_vals").html('');
-<<<<<<< HEAD
-			values.forEach(function(value){
-				$("#ordinal_vals").append('<text>' + value + " , " + '</text>' );
-=======
 			values.forEach( function (value) {
-				if (value == undefined)
-					$("#ordinal_vals").append('<div class="legend" style="background:gray"></div><text>No data</text> <br>' );
-				else
-					$("#ordinal_vals").append('<div class="legend" style="background:' + fillScale(value) + '"></div><text>' + value + '</text> <br>' );
->>>>>>> baf6bd13eecce40d2dc38346df1e65eb2824b601
+				if (value != undefined)
+					$("#ordinal_vals").append('<div class="legend" style="background:' + fillScale(value) + '"></div><text>'
+					+ value + " , "  + '</text>' );
 			});
-
 
 		});		
 
@@ -252,9 +235,6 @@
 			.attr("r", function(data_vals){return ignore_nulls(rScale, number_split, data_vals, 3);})
 
 		}
-
-
-
 
 
 	})
