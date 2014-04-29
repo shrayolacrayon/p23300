@@ -9,6 +9,7 @@
 	<script src="http://d3js.org/d3.v3.min.js"charset="utf-8"></script>
 
 	<style>
+<<<<<<< HEAD
 		svg {border: solid black 1px;}
 			.axis path,
 			.axis line {
@@ -21,6 +22,12 @@
 					position:absolute; top : 250px; fill : black ;
 					font-size = 8pt; text-align : center;}
 		
+=======
+		svg {border: solid black 1px}
+		#group_form {border: solid black 1px; width: 150px; padding-left: 10px;position:absolute; left:820px}
+		.legend {width: 20px;height:20px;margin-right:10px;display:inline-block;}
+		circle {stroke:black}
+>>>>>>> baf6bd13eecce40d2dc38346df1e65eb2824b601
 	</style>
 </head>
 <body>
@@ -36,13 +43,13 @@
 		<input type="radio" name="ordinal" value="attributes.Alcohol">Alcohol
 		<input type="radio" name="ordinal" value="attributes.Wi-Fi">Wi-Fi 
 	</form>
-	<h5> Values: </h5>
+	<h3> Legend  <span style="font-size:12px">&#9660;</span></h3>
 	<div id="ordinal_vals">
 	</div>
 	<div id = "hover_data"></div>
 	</div>
 
-	
+
 	<div id="network"></div>
 
 
@@ -50,8 +57,13 @@
 	var height = 400;
 	var width = 600;
 
+<<<<<<< HEAD
 	var padding = 30;
 	
+=======
+	var padding = 10;
+
+>>>>>>> baf6bd13eecce40d2dc38346df1e65eb2824b601
 	var svg = d3.select("#network").append("svg").attr("height", height).attr("width", width);
 
 	var data;
@@ -88,11 +100,11 @@
 			if (data_attr < min){
 				min = data_attr;
 			}
-			
+
 		});
 		callback(min, max);
 	}
-	
+
 	var find_ordinals = function(attribute,data,callback){
 		var attributes = data.map(function(obj) { return unpack_attr(obj, attribute); });
 		attributes = attributes.filter(function(v,i) { return attributes.indexOf(v) == i; });
@@ -109,7 +121,7 @@
 			return data_point[attr_list[0]];
 		}
 	}
-	
+
 	var ignore_nulls = function(scale, attr_list, point, default_val){
 		val = unpack_attr(point, attr_list);
 		//console.log(val);
@@ -124,12 +136,12 @@
 		var attributes = [];
 		data.forEach(function(d))
 	}*/
-	
+
 	var force = d3.layout.force()
 	  .size([width, height]);
-		
+
 		//http://mimno.infosci.cornell.edu/community/miserables.json
-		
+
 	var graph, circles;
 	d3.json("yelp_data.json",
 	   function (error, g) {
@@ -162,6 +174,7 @@
 					.attr("r", function(point){return reviewScale(point.review_count);})
 					.attr("xlink:href", function(d){return "http://maps.google.com/?q=" + d["full_address"];})
 					.style("fill", function(point){return randomScale(Math.random() * 5);})
+<<<<<<< HEAD
 					.style("opacity", 0.6)
 					.on("mouseover", function(d) {
 										
@@ -181,6 +194,11 @@
 									d3.select(this).style("opacity",0.6);
 					})
 					.on("click", function(d){ window.open("http://maps.google.com/?q=" + d["full_address"]);});
+=======
+					.style("opacity", 0.8);
+
+
+>>>>>>> baf6bd13eecce40d2dc38346df1e65eb2824b601
 	   	 });
 		 
 
@@ -188,13 +206,13 @@
 		console.log("changed");
 		var number = $("input:radio[name=number]:checked").val();
 		var ordinal = $("input:radio[name=ordinal]:checked").val();
-		
+
 		var ordinal_split;
 		if (ordinal)
 			ordinal_split = ordinal.split('.');
 
 		var number_split = number.split('.');
-		
+
 
 		var rScale, fillScale;
 		find_min_max(number_split, data, function(min_val, max_val){
@@ -202,7 +220,7 @@
 			//console.log(min_val);
 			//console.log("max");
 			//console.log(max_val);
-			rScale = d3.scale.linear().domain([min_val, max_val]).range([5,15]);
+			rScale = d3.scale.linear().domain([min_val, max_val]).range([4,20]);
 		});
 		if (ordinal){
 		find_ordinals(ordinal_split, data, function(values){
@@ -212,8 +230,16 @@
 				.attr("r", function(data_vals){return ignore_nulls(rScale, number_split, data_vals, 3);})
 				.style("fill", function(data_vals){return ignore_nulls(fillScale, ordinal_split, data_vals, 'gray')})
 			$("#ordinal_vals").html('');
+<<<<<<< HEAD
 			values.forEach(function(value){
 				$("#ordinal_vals").append('<text>' + value + " , " + '</text>' );
+=======
+			values.forEach( function (value) {
+				if (value == undefined)
+					$("#ordinal_vals").append('<div class="legend" style="background:gray"></div><text>No data</text> <br>' );
+				else
+					$("#ordinal_vals").append('<div class="legend" style="background:' + fillScale(value) + '"></div><text>' + value + '</text> <br>' );
+>>>>>>> baf6bd13eecce40d2dc38346df1e65eb2824b601
 			});
 
 
@@ -227,22 +253,17 @@
 
 		}
 
-			
-		
-		
+
+
+
 
 	})
-	 
 
-	 
+
+
 	 });
-	
+
 	</script>
 </body>
 
 </html>
-
-
-
-
-
