@@ -10,18 +10,17 @@
 
 	<style>
 		svg {border: solid black 1px;}
-<<<<<<< HEAD
 			.axis path,
 			.axis line {
 				fill: none;
 				stroke: black;
 			}
 			.axis text{ text-anchor : middle; font-size : x-small}
-			
-
-=======
-		#group_form {border: solid black 1px; width: 120px; position:absolute; right:600px;}
->>>>>>> eb91ed0a7cbe2b5341310980cbe49e245b9f04d8
+		#group_form {border: solid black 1px; width: 350px; height : 250; position:absolute; left:610px; text-align : center;}
+		#hover_data {border: solid black 1px; width: 350px; height : 150px ;
+					position:absolute; top : 250px; fill : black ;
+					font-size = 8pt; text-align : center;}
+		
 	</style>
 </head>
 <body>
@@ -29,17 +28,18 @@
 	<div id = "group_form">
 	<form>
 		<h3> Number Values </h3>
-		<input type="radio" name="number" value="attributes.Price Range">Price <br>
-		<input type="radio" name="number" value="stars">Rating<br>
+		<input type="radio" name="number" value="attributes.Price Range">Price
+		<input type="radio" name="number" value="stars">Rating
 		<input type="radio" name="number" value="review_count" checked>Review Count
 		<h3> Ordinal Values </h3>
-		<input type="radio" name="ordinal" value="attributes.Noise Level">Noise Level <br>
-		<input type="radio" name="ordinal" value="attributes.Alcohol">Alcohol<br>
+		<input type="radio" name="ordinal" value="attributes.Noise Level">Noise Level
+		<input type="radio" name="ordinal" value="attributes.Alcohol">Alcohol
 		<input type="radio" name="ordinal" value="attributes.Wi-Fi">Wi-Fi 
 	</form>
 	<h5> Values: </h5>
 	<div id="ordinal_vals">
 	</div>
+	<div id = "hover_data"></div>
 	</div>
 
 	
@@ -47,8 +47,8 @@
 
 
 	<script>
-	var height = 800;
-	var width = 800;
+	var height = 400;
+	var width = 600;
 
 	var padding = 30;
 	
@@ -144,9 +144,9 @@
 
 					var reviewScale = d3.scale.log().domain([1,max_reviews]).range([0,10]);
 					
-					var x_Axis = d3.svg.axis().scale(longScale).orient("bottom");
+					var x_Axis = d3.svg.axis().scale(latScale).orient("bottom");
 					
-					var y_Axis = d3.svg.axis().scale(latScale).orient("left");
+					var y_Axis = d3.svg.axis().scale(longScale).orient("left");
 					
 					svg.append("g").attr("class", "axis").attr("transform", "translate(0," + (height - padding) + ")").call(x_Axis);
 					
@@ -160,11 +160,29 @@
 					circles.attr("cx", function(point){return latScale(point.latitude);})
 					.attr("cy", function(point){return longScale(point.longitude);})
 					.attr("r", function(point){return reviewScale(point.review_count);})
+					.attr("xlink:href", function(d){return "http://maps.google.com/?q=" + d["full_address"];})
 					.style("fill", function(point){return randomScale(Math.random() * 5);})
-					.style("opacity", 0.6);
-
-
+					.style("opacity", 0.6)
+					.on("mouseover", function(d) {
+										
+										d3.select(this).style("opacity", 1);
+										var x = "Name: " + d["name"] + "<br>"+
+												"Price: " + d["attributes"]["Price Range"] + "<br>" +
+												"Stars: " + d["Stars"] + "<br>" +
+												"Reviews: " + d["review_count"] + "<br>" +
+												"Address: " + d["full_address"] + "<br>" +
+												"Click For Drections";
+																	
+										d3.select("#hover_data").append("text")
+										.html(x);})
+					.on("mouseout",function(d) {
+									$("#hover_data").empty();
+									d3.select("#hover_data").append("text").html("Restaurant Info" + "<br>");
+									d3.select(this).style("opacity",0.6);
+					})
+					.on("click", function(d){ window.open("http://maps.google.com/?q=" + d["full_address"]);});
 	   	 });
+		 
 
 	$('#group_form').change(function(){
 		console.log("changed");
@@ -195,7 +213,7 @@
 				.style("fill", function(data_vals){return ignore_nulls(fillScale, ordinal_split, data_vals, 'gray')})
 			$("#ordinal_vals").html('');
 			values.forEach(function(value){
-				$("#ordinal_vals").append('<text>' + value + '</text> <br>' );
+				$("#ordinal_vals").append('<text>' + value + " , " + '</text>' );
 			});
 
 
