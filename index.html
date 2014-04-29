@@ -26,8 +26,7 @@
 					position:absolute; top : 250px; fill : black ; text-align : center;
 					font-size : 12pt}
 		circle {stroke:black}
-		.legend {width: 20px;height:20px;margin-right:10px; vertical-align : middle;display:inline-block;}
-
+		.legend {width: 20px;height:20px;margin-right:10px; opaccity : .6; vertical-align : middle;display:inline-block;}
 	</style>
 </head>
 <body>
@@ -58,13 +57,8 @@
 	var width = 600;
 
 	var padding = 30;
-<<<<<<< HEAD
 
 
-=======
-	
-
->>>>>>> issues with merging
 	var svg = d3.select("#network").append("svg").attr("height", height).attr("width", width);
 
 	var data;
@@ -195,10 +189,6 @@
 					})
 					.on("click", function(d){ window.open("http://maps.google.com/?q=" + d["full_address"]);});
 
-<<<<<<< HEAD
-=======
-
->>>>>>> issues with merging
 	   	 });
 		 
 
@@ -231,17 +221,9 @@
 				.style("fill", function(data_vals){return ignore_nulls(fillScale, ordinal_split, data_vals, 'gray')})
 			$("#ordinal_vals").html('');
 			values.forEach( function (value) {
-<<<<<<< HEAD
 				if (value != undefined)
 					$("#ordinal_vals").append('<div class="legend" style="background:' + fillScale(value) + '"></div><text>'
 					+ value + " , "  + '</text>' );
-=======
-				if (value == undefined)
-					$("#ordinal_vals").append('<div class="legend" style="background:gray"></div><text>No data</text> <br>' );
-				else
-					$("#ordinal_vals").append('<div class="legend" style="background:' + fillScale(value) + '"></div><text>' + value + '</text> <br>' );
-
->>>>>>> issues with merging
 			});
 
 		});		
